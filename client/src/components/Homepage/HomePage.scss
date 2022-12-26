@@ -1,0 +1,30 @@
+.HomePage {
+  background-color: grey;
+  height: 100vh;
+}
+
+.HomePage_From {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HomePage_videoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row-reverse;
+}
+
+.HomePage_Button.HomePage_Button {
+  background-color: gray;
+  border: 1px solid black;
+  padding: 4px;
+  color: black;
+  margin: 0px 5px;
+  height: 39px;
+}
+
+.HomePage_TextField.HomePage_TextField {
+  padding: 4px;
+}

@@ -1,0 +1,41 @@
+.LocalParticipant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.LocalParticipant_VideoSmall {
+  height: 184px;
+  width: 245px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 3px solid black;
+  border-radius: 30px;
+}
+.LocalParticipant_VideoLarge {
+  height: 555px;
+  width: 740px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 3px solid black;
+  border-radius: 30px;
+}
+
+.LocalParticipant_IconsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  bottom: 30px;
+}
+
+.LocalParticipant_Icon {
+  background-color: #d1d1d1;
+  border-radius: 50%;
+  padding: 2px;
+  margin: 2px;
+}

@@ -1,0 +1,23 @@
+.Room_LocalParticipant {
+  position: absolute;
+  bottom: 30px;
+  right: 35px;
+}
+
+.Room_RemoteParticipants {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.Room_Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+}
+
+.Room_CopyLink {
+  text-decoration: underline;
+}

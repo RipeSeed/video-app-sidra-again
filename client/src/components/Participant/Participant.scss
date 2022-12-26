@@ -1,0 +1,19 @@
+.Participant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.Participant_video {
+  height: inherit;
+  width: inherit;
+  max-width: 480px;
+  max-height: 360px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 3px solid black;
+  border-radius: 30px;
+}
