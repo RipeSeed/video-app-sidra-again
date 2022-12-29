@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
 }
 
 .HomePage_videoContainer {
@@ -27,4 +28,24 @@
 
 .HomePage_TextField.HomePage_TextField {
   padding: 4px;
+}
+
+.HomePage_Lobby {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: inherit;
+}
+
+.HomePage_Head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 80px;
+  width: 100%;
+}
+
+.HomePage_SignOutBtn.HomePage_SignOutBtn {
+  margin: 0px 10px;
 }

@@ -75,7 +75,9 @@ const Participant = ({ participant, room }) => {
 
   return (
     <div className="LocalParticipant" id={participant.identity}>
-      <Typography variant="caption">You</Typography>
+      <Typography variant="caption">
+        {participant.identity.split("-").pop().trim()} (You)
+      </Typography>
       <video
         className={
           room.participants.size === 0

@@ -65,7 +65,7 @@ const Participant = ({ participant }) => {
 
   return (
     <div className="Participant" id={participant.identity}>
-      <h3>{participant.identity}</h3>
+      <h3>{participant.identity.split("-").pop().trim()}</h3>
       <video className="Participant_video" ref={videoRef} autoPlay={true} />
       <audio ref={audioRef} autoPlay={true} />
     </div>
