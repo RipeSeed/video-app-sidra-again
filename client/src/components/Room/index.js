@@ -35,7 +35,7 @@ const Room = ({
   return (
     <div className="Room">
       <div className="Room_Header">
-        <Typography variant="h3">Room: {roomName}</Typography>
+        <Typography variant="h6">Room-ID: {roomName}</Typography>
         <div>
           <Button
             variant="contained"

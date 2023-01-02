@@ -9,7 +9,7 @@ const startRoom = async (
   userName
 ) => {
   // fetch an Access Token from the join-room route
-  const response = await axios.post("/join-room", {
+  const response = await axios.post("http://localhost:5000/join-room", {
     roomName: roomName,
     userName: userName,
   });

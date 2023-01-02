@@ -23,17 +23,11 @@ function App() {
     });
   }, []);
 
-  const signOut = () => {
-    firbaseApp.auth().signOut();
-  };
   return (
     <Router>
       <Routes>
         <Route element={<PrivateRoute isSignedIn={user ? true : false} />}>
-          <Route
-            path="/"
-            element={<HomePage signOut={signOut} user={user} />}
-          />
+          <Route path="/" element={<HomePage user={user} />} />
         </Route>
         <Route
           path="/login"
