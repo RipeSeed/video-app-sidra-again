@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 import "./HomePage.scss";
 import Room from "../Room";
 
-const HomePage = ({ signOut, user }) => {
+const HomePage = ({ user }) => {
   const [roomName, setRoomName] = useState("");
   const [participantsList, setParticipantList] = useState([]);
   const [room, setRoom] = useState(null);
@@ -35,7 +35,6 @@ const HomePage = ({ signOut, user }) => {
           participantList={participantsList}
           setRoom={setRoom}
           room={room}
-          signOut={signOut}
         />
       ) : (
         <div className="HomePage_Lobby">

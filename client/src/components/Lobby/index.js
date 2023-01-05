@@ -49,7 +49,7 @@ const Lobby = ({
         justifyContent="start"
       >
         <Typography variant="h3">
-          Secure video conferecing for everyone
+          Secure video conferencing for everyone
         </Typography>
         <Typography className="Lobby_SubText" variant="h6">
           Connect, collaborate, and celebrate from anywhere with us.

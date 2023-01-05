@@ -10,7 +10,6 @@ const Room = ({
   participantList,
   setRoom,
   room,
-  signOut,
 }) => {
   const remoteParticipants = participantList.map((participant) => (
     <Participant key={participant.sid} participant={participant} room={room} />
@@ -29,7 +28,6 @@ const Room = ({
       }
       return null;
     });
-    signOut();
   };
 
   return (
@@ -53,7 +51,7 @@ const Room = ({
             className="Room_Btn"
             onClick={handleSignOut}
           >
-            Sign Out
+            Leave Room
           </Button>
         </div>
       </div>
