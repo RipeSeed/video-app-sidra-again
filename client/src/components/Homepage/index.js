@@ -14,7 +14,7 @@ const HomePage = ({ user }) => {
   const queryParams = new URLSearchParams(window.location.search);
   const _roomName = queryParams.get("roomName");
   useEffect(() => {
-    if (_roomName) {
+    if (_roomName && user.displayName) {
       setRoomName(_roomName);
       startRoom(
         _roomName,
@@ -25,7 +25,7 @@ const HomePage = ({ user }) => {
       );
       window.history.pushState({}, document.title, "/");
     }
-  }, []);
+  }, [user]);
   return (
     <div className="HomePage">
       {room ? (
