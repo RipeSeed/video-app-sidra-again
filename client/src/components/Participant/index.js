@@ -7,6 +7,7 @@ const Participant = ({ participant }) => {
 
   const videoRef = useRef();
   const audioRef = useRef();
+  const screenRef = useRef();
 
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
@@ -44,13 +45,18 @@ const Participant = ({ participant }) => {
   }, [participant]);
 
   useEffect(() => {
-    const videoTrack = videoTracks[0];
-    if (videoTrack) {
-      videoTrack.attach(videoRef.current);
-      return () => {
-        videoTrack.detach();
-      };
-    }
+    videoTracks.forEach((track) => {
+      if (track.name === "screen-share") {
+        track.attach(screenRef.current);
+      } else {
+        track.attach(videoRef.current);
+      }
+    });
+
+    // return () => {
+    //   videoTrack.detach();
+    //   screenTrack.detach();
+    // };
   }, [videoTracks]);
 
   useEffect(() => {
@@ -67,6 +73,7 @@ const Participant = ({ participant }) => {
     <div className="Participant" id={participant.identity}>
       <h3>{participant.identity.split("-").pop().trim()}</h3>
       <video className="Participant_video" ref={videoRef} autoPlay={true} />
+      <video className="Participant_video" ref={screenRef} autoPlay={true} />
       <audio ref={audioRef} autoPlay={true} />
     </div>
   );

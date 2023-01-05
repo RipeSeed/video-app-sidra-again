@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Participant from "../Participant";
 import { Typography, Button } from "@mui/material";
 import LocalParticipant from "../LocalParticipant";
@@ -18,6 +18,10 @@ const Room = ({
   function getPathFromUrl(url) {
     return url.split(/[?#]/)[0];
   }
+
+  useEffect(() => {
+    console.log(room);
+  }, [room]);
 
   const handleSignOut = () => {
     setRoom((prevRoom) => {

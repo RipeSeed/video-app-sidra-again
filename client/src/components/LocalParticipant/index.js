@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typography } from "@mui/material";
+import { PresentToAll, CancelPresentation } from "@mui/icons-material";
+import { LocalVideoTrack } from "twilio-video";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMicrophoneSlash,
@@ -9,11 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./LocalParticipant.scss";
 
-const Participant = ({ participant, room }) => {
+const LocalParticipant = ({ participant, room }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
   const [mute, setMute] = useState(false);
   const [hideVideo, setHideVideo] = useState(false);
+  const [presentScreen, setPresentScreen] = useState(false);
+  const [screenTrack, setScreenTrack] = useState();
 
   const videoRef = useRef();
   const audioRef = useRef();
@@ -136,9 +140,44 @@ const Participant = ({ participant, room }) => {
             />
           )}
         </div>
+        <div className="LocalParticipant_Icon ">
+          {!presentScreen ? (
+            <PresentToAll
+              onClick={() => {
+                setPresentScreen(true);
+                navigator.mediaDevices
+                  .getDisplayMedia()
+                  .then((stream) => {
+                    console.log("screen track", stream.getTracks()[0]);
+                    const _screenTrack = new LocalVideoTrack(
+                      stream.getTracks()[0],
+                      {
+                        name: "screen-share",
+                      }
+                    );
+                    setScreenTrack(_screenTrack);
+                    room.localParticipant.publishTrack(_screenTrack);
+                  })
+                  .catch((error) => {
+                    console.log("error", error);
+                    alert("Could not share the screen.");
+                  });
+              }}
+            />
+          ) : (
+            <CancelPresentation
+              onClick={() => {
+                setPresentScreen(false);
+                room.localParticipant.unpublishTrack(screenTrack);
+                screenTrack.stop();
+                setScreenTrack(null);
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Participant;
+export default LocalParticipant;
