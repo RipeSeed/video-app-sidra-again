@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Participant.scss";
 
-const Participant = ({ participant }) => {
+const Participant = ({ participant, room }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
 
@@ -65,8 +65,17 @@ const Participant = ({ participant }) => {
 
   return (
     <div className="Participant" id={participant.identity}>
-      <h3>{participant.identity.split("-").pop().trim()}</h3>
-      <video className="Participant_video" ref={videoRef} autoPlay={true} />
+      {console.log("count", room.participants.size)}
+      <h4>{participant.identity.split("-").pop().trim()}</h4>
+      <video
+        className={
+          room.participants.size <= 2
+            ? "Participant_video Participant_videoLarge"
+            : "Participant_video Participant_videoSmall"
+        }
+        ref={videoRef}
+        autoPlay={true}
+      />
       <audio ref={audioRef} autoPlay={true} />
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import Participant from "../Participant";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Grid } from "@mui/material";
 import LocalParticipant from "../LocalParticipant";
 import "./Room.scss";
 
@@ -55,7 +55,9 @@ const Room = ({
           </Button>
         </div>
       </div>
-      <div className="Room_RemoteParticipants">{remoteParticipants}</div>
+      <Grid item container className="Room_RemoteParticipants">
+        {remoteParticipants}
+      </Grid>
       <div
         className={room.participants.size === 0 ? "" : "Room_LocalParticipant"}
       >
