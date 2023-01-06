@@ -13,6 +13,7 @@ const Lobby = ({
   setRoom,
   user,
   startRoom,
+  setLoader,
 }) => {
   return (
     <Grid item container xs={12} className="Lobby">
@@ -64,6 +65,7 @@ const Lobby = ({
             className="Lobby_StartRoomBtn"
             variant="contained"
             onClick={() => {
+              setLoader(true);
               const roomUuid = uuidv4();
               setRoomName(roomUuid);
               startRoom(
@@ -71,7 +73,8 @@ const Lobby = ({
                 participantsList,
                 setParticipantList,
                 setRoom,
-                user.displayName
+                user.displayName,
+                setLoader
               );
             }}
           >
@@ -82,13 +85,15 @@ const Lobby = ({
             className="Lobby_Form"
             onSubmit={(e) => {
               e.preventDefault();
+              setLoader(true);
               roomName.length >= 1 &&
                 startRoom(
                   roomName,
                   participantsList,
                   setParticipantList,
                   setRoom,
-                  user.displayName
+                  user.displayName,
+                  setLoader
                 );
             }}
           >

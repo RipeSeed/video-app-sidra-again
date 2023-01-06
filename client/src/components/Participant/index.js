@@ -65,7 +65,6 @@ const Participant = ({ participant, room }) => {
 
   return (
     <div className="Participant" id={participant.identity}>
-      {console.log("count", room.participants.size)}
       <h4>{participant.identity.split("-").pop().trim()}</h4>
       <video
         className={

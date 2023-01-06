@@ -10,18 +10,21 @@ const HomePage = ({ user }) => {
   const [roomName, setRoomName] = useState("");
   const [participantsList, setParticipantList] = useState([]);
   const [room, setRoom] = useState(null);
+  const [loader, setLoader] = useState(null);
 
   const queryParams = new URLSearchParams(window.location.search);
   const _roomName = queryParams.get("roomName");
   useEffect(() => {
     if (_roomName && user.displayName) {
+      setLoader(true);
       setRoomName(_roomName);
       startRoom(
         _roomName,
         participantsList,
         setParticipantList,
         setRoom,
-        user.displayName
+        user.displayName,
+        setLoader
       );
       window.history.pushState({}, document.title, "/");
     }
@@ -38,8 +41,8 @@ const HomePage = ({ user }) => {
         />
       ) : (
         <div className="HomePage_Lobby">
-          {_roomName ? (
-            <CircularProgress color="inherit" />
+          {_roomName || loader ? (
+            <CircularProgress className="HomePage_Loader" color="inherit" />
           ) : (
             <Lobby
               roomName={roomName}
@@ -49,6 +52,7 @@ const HomePage = ({ user }) => {
               setRoom={setRoom}
               user={user}
               startRoom={startRoom}
+              setLoader={setLoader}
             />
           )}
         </div>

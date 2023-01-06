@@ -6,7 +6,8 @@ const startRoom = async (
   participantList,
   setParticipantList,
   setRoom,
-  userName
+  userName,
+  setLoader
 ) => {
   // fetch an Access Token from the join-room route
   const response = await axios.post("http://localhost:5000/join-room", {
@@ -17,8 +18,8 @@ const startRoom = async (
 
   // join the video room with the token
   const room = await joinVideoRoom(roomName, token);
-  console.log("room", room);
   setRoom(room);
+  setLoader(false);
   // render the local and remote participants' video and audio tracks
   let remoteParticipantList = [];
   room.participants.forEach((participant) => {
