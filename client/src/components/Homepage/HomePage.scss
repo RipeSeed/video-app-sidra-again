@@ -1,6 +1,5 @@
 .HomePage {
-  background-color: grey;
-  height: 100vh;
+  background-color: #fff;
 }
 
 .HomePage_From {
@@ -48,4 +47,8 @@
 
 .HomePage_SignOutBtn.HomePage_SignOutBtn {
   margin: 0px 10px;
+}
+
+.HomePage_Loader.HomePage_Loader {
+  margin-top: 200px;
 }

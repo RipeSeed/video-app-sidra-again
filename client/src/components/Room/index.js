@@ -1,6 +1,6 @@
 import React from "react";
 import Participant from "../Participant";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Grid } from "@mui/material";
 import LocalParticipant from "../LocalParticipant";
 import "./Room.scss";
 
@@ -10,7 +10,6 @@ const Room = ({
   participantList,
   setRoom,
   room,
-  signOut,
 }) => {
   const remoteParticipants = participantList.map((participant) => (
     <Participant key={participant.sid} participant={participant} room={room} />
@@ -29,13 +28,12 @@ const Room = ({
       }
       return null;
     });
-    signOut();
   };
 
   return (
     <div className="Room">
       <div className="Room_Header">
-        <Typography variant="h3">Room: {roomName}</Typography>
+        <Typography variant="h6">Room-ID: {roomName}</Typography>
         <div>
           <Button
             variant="contained"
@@ -53,11 +51,13 @@ const Room = ({
             className="Room_Btn"
             onClick={handleSignOut}
           >
-            Sign Out
+            Leave Room
           </Button>
         </div>
       </div>
-      <div className="Room_RemoteParticipants">{remoteParticipants}</div>
+      <Grid item container className="Room_RemoteParticipants">
+        {remoteParticipants}
+      </Grid>
       <div
         className={room.participants.size === 0 ? "" : "Room_LocalParticipant"}
       >

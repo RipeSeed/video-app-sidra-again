@@ -10,30 +10,20 @@ import { onAuthStateChanged } from "firebase/auth";
 function App() {
   const [user, setUser] = useState({});
   useEffect(() => {
-    onAuthStateChanged(firbaseApp.auth(), (user) => {
-      if (user) {
-        setUser({
-          email: user.email,
-          id: user.uid,
-          displayName: user.displayName,
-        });
+    onAuthStateChanged(firbaseApp.auth(), (_user) => {
+      if (_user) {
+        setUser(_user);
       } else {
         setUser(null);
       }
     });
   }, []);
 
-  const signOut = () => {
-    firbaseApp.auth().signOut();
-  };
   return (
     <Router>
       <Routes>
         <Route element={<PrivateRoute isSignedIn={user ? true : false} />}>
-          <Route
-            path="/"
-            element={<HomePage signOut={signOut} user={user} />}
-          />
+          <Route path="/" element={<HomePage user={user} />} />
         </Route>
         <Route
           path="/login"

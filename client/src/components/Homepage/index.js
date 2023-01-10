@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { startRoom } from "./JoinRoom";
-import { Button, TextField, CircularProgress } from "@mui/material";
+import Lobby from "../Lobby";
+import { CircularProgress } from "@mui/material";
 
 import "./HomePage.scss";
 import Room from "../Room";
 
-const HomePage = ({ signOut, user }) => {
+const HomePage = ({ user }) => {
   const [roomName, setRoomName] = useState("");
   const [participantsList, setParticipantList] = useState([]);
   const [room, setRoom] = useState(null);
+  const [loader, setLoader] = useState(null);
 
   const queryParams = new URLSearchParams(window.location.search);
   const _roomName = queryParams.get("roomName");
   useEffect(() => {
-    if (_roomName) {
+    if (_roomName && user.displayName) {
+      setLoader(true);
       setRoomName(_roomName);
       startRoom(
         _roomName,
         participantsList,
         setParticipantList,
         setRoom,
-        user.displayName
+        user.displayName,
+        setLoader
       );
       window.history.pushState({}, document.title, "/");
     }
-  }, []);
+  }, [user]);
   return (
     <div className="HomePage">
       {room ? (
@@ -34,56 +38,22 @@ const HomePage = ({ signOut, user }) => {
           participantList={participantsList}
           setRoom={setRoom}
           room={room}
-          signOut={signOut}
         />
       ) : (
         <div className="HomePage_Lobby">
-          <div className="HomePage_Head">
-            <Button
-              className="HomePage_SignOutBtn"
-              variant="contained"
-              onClick={signOut}
-            >
-              Sign Out
-            </Button>
-          </div>
-          {_roomName ? (
-            <CircularProgress color="inherit" />
+          {_roomName || loader ? (
+            <CircularProgress className="HomePage_Loader" color="inherit" />
           ) : (
-            <div className="HomePage_From">
-              <form
-                id="room-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  roomName.length >= 1 &&
-                    startRoom(
-                      roomName,
-                      participantsList,
-                      setParticipantList,
-                      setRoom,
-                      user.displayName
-                    );
-                }}
-              >
-                <div>Enter a Room Name to join: </div>
-                <TextField
-                  name="room_name"
-                  size="small"
-                  id="room-name-input"
-                  variant="outlined"
-                  onBlur={(e) => {
-                    setRoomName(e.target.value);
-                  }}
-                />
-                <Button
-                  className="HomePage_Button"
-                  variant="contained"
-                  type="submit"
-                >
-                  Join Room
-                </Button>
-              </form>
-            </div>
+            <Lobby
+              roomName={roomName}
+              setRoomName={setRoomName}
+              participantsList={participantsList}
+              setParticipantList={setParticipantList}
+              setRoom={setRoom}
+              user={user}
+              startRoom={startRoom}
+              setLoader={setLoader}
+            />
           )}
         </div>
       )}
