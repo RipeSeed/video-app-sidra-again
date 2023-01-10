@@ -2,51 +2,12 @@
   background-color: #fff;
 }
 
-.HomePage_From {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.HomePage_videoContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row-reverse;
-}
-
-.HomePage_Button.HomePage_Button {
-  background-color: gray;
-  border: 1px solid black;
-  padding: 4px;
-  color: black;
-  margin: 0px 5px;
-  height: 39px;
-}
-
-.HomePage_TextField.HomePage_TextField {
-  padding: 4px;
-}
-
 .HomePage_Lobby {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: inherit;
-}
-
-.HomePage_Head {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 80px;
-  width: 100%;
-}
-
-.HomePage_SignOutBtn.HomePage_SignOutBtn {
-  margin: 0px 10px;
 }
 
 .HomePage_Loader.HomePage_Loader {

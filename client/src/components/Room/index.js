@@ -18,7 +18,7 @@ const Room = ({
     return url.split(/[?#]/)[0];
   }
 
-  const handleSignOut = () => {
+  const handleLeaveRoom = () => {
     setRoom((prevRoom) => {
       if (prevRoom) {
         prevRoom.localParticipant.tracks.forEach((trackPub) => {
@@ -49,7 +49,7 @@ const Room = ({
           <Button
             variant="contained"
             className="Room_Btn"
-            onClick={handleSignOut}
+            onClick={handleLeaveRoom}
           >
             Leave Room
           </Button>
