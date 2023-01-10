@@ -4,7 +4,14 @@ import { Typography, Button } from "@mui/material";
 import LocalParticipant from "../LocalParticipant";
 import "./Room.scss";
 
-const Room = ({ roomName, localParticipant, participantList, room }) => {
+const Room = ({
+  roomName,
+  localParticipant,
+  participantList,
+  setRoom,
+  room,
+  signOut,
+}) => {
   const remoteParticipants = participantList.map((participant) => (
     <Participant key={participant.sid} participant={participant} room={room} />
   ));
@@ -12,21 +19,43 @@ const Room = ({ roomName, localParticipant, participantList, room }) => {
     return url.split(/[?#]/)[0];
   }
 
+  const handleSignOut = () => {
+    setRoom((prevRoom) => {
+      if (prevRoom) {
+        prevRoom.localParticipant.tracks.forEach((trackPub) => {
+          trackPub.track.stop();
+        });
+        prevRoom.disconnect();
+      }
+      return null;
+    });
+    signOut();
+  };
+
   return (
     <div className="Room">
       <div className="Room_Header">
         <Typography variant="h3">Room: {roomName}</Typography>
-        <Button
-          variant="contained"
-          className="Room_CopyLink"
-          onClick={() =>
-            navigator.clipboard.writeText(
-              `${getPathFromUrl(window.location.href)}?roomName=${roomName}`
-            )
-          }
-        >
-          Copy Link
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            className="Room_Btn"
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `${getPathFromUrl(window.location.href)}?roomName=${roomName}`
+              )
+            }
+          >
+            Copy Link
+          </Button>
+          <Button
+            variant="contained"
+            className="Room_Btn"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </Button>
+        </div>
       </div>
       <div className="Room_RemoteParticipants">{remoteParticipants}</div>
       <div

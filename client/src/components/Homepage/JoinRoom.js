@@ -5,11 +5,13 @@ const startRoom = async (
   roomName,
   participantList,
   setParticipantList,
-  setRoom
+  setRoom,
+  userName
 ) => {
   // fetch an Access Token from the join-room route
   const response = await axios.post("/join-room", {
     roomName: roomName,
+    userName: userName,
   });
   const token = response.data.token;
 
