@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Typography } from "@mui/material";
 import "./Participant.scss";
 
-const Participant = ({ participant }) => {
+const Participant = ({
+  participant,
+  room,
+  setIsScreenShared,
+  isScreenShared,
+  screenRef,
+}) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
 
   const videoRef = useRef();
   const audioRef = useRef();
-  const screenRef = useRef();
 
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
@@ -28,6 +34,7 @@ const Participant = ({ participant }) => {
 
     const trackUnsubscribed = (track) => {
       if (track.kind === "video") {
+        track.name === "screen-share" && setIsScreenShared(false);
         setVideoTracks((videoTracks) => videoTracks.filter((v) => v !== track));
       } else if (track.kind === "audio") {
         setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
@@ -47,6 +54,7 @@ const Participant = ({ participant }) => {
   useEffect(() => {
     videoTracks.forEach((track) => {
       if (track.name === "screen-share") {
+        setIsScreenShared(true);
         track.attach(screenRef.current);
       } else {
         track.attach(videoRef.current);
@@ -71,9 +79,20 @@ const Participant = ({ participant }) => {
 
   return (
     <div className="Participant" id={participant.identity}>
-      <h3>{participant.identity.split("-").pop().trim()}</h3>
-      <video className="Participant_video" ref={videoRef} autoPlay={true} />
-      <video className="Participant_video" ref={screenRef} autoPlay={true} />
+      <Typography variant="caption" className="Participant_name">
+        {participant.identity.split("-").pop().trim()}
+      </Typography>
+      <video
+        className={
+          isScreenShared
+            ? "Participant_video Participant_videoSmallest"
+            : room.participants.size <= 2
+            ? "Participant_video Participant_videoLarge"
+            : "Participant_video Participant_videoSmall"
+        }
+        ref={videoRef}
+        autoPlay={true}
+      />
       <audio ref={audioRef} autoPlay={true} />
     </div>
   );

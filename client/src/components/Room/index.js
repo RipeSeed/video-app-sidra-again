@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Participant from "../Participant";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Grid } from "@mui/material";
+import ScreenShare from "../ScreenShare";
 import LocalParticipant from "../LocalParticipant";
 import "./Room.scss";
 
@@ -10,20 +11,36 @@ const Room = ({
   participantList,
   setRoom,
   room,
-  signOut,
 }) => {
+  const [isScreenShared, setIsScreenShared] = useState(false);
+  const screenRef = useRef();
+
   const remoteParticipants = participantList.map((participant) => (
-    <Participant key={participant.sid} participant={participant} room={room} />
+    <Participant
+      key={participant.sid}
+      participant={participant}
+      room={room}
+      setIsScreenShared={setIsScreenShared}
+      isScreenShared={isScreenShared}
+      screenRef={screenRef}
+    />
   ));
+
+  useEffect(() => {
+    participantList.forEach((participant) => {
+      participant.videoTracks.forEach((track) => {
+        if (track.trackName === "screen-share") {
+          setIsScreenShared(true);
+        }
+      });
+    });
+  }, [participantList]);
+
   function getPathFromUrl(url) {
     return url.split(/[?#]/)[0];
   }
 
-  useEffect(() => {
-    console.log(room);
-  }, [room]);
-
-  const handleSignOut = () => {
+  const handleLeaveRoom = () => {
     setRoom((prevRoom) => {
       if (prevRoom) {
         prevRoom.localParticipant.tracks.forEach((trackPub) => {
@@ -33,7 +50,6 @@ const Room = ({
       }
       return null;
     });
-    signOut();
   };
 
   return (
@@ -55,21 +71,37 @@ const Room = ({
           <Button
             variant="contained"
             className="Room_Btn"
-            onClick={handleSignOut}
+            onClick={handleLeaveRoom}
           >
-            Sign Out
+            Leave Room
           </Button>
         </div>
       </div>
-      <div className="Room_RemoteParticipants">{remoteParticipants}</div>
+      <Grid
+        item
+        container
+        className={
+          isScreenShared
+            ? "Room_RemoteParticipants Room_sideBar"
+            : "Room_RemoteParticipants"
+        }
+      >
+        {remoteParticipants}
+      </Grid>
+      <ScreenShare isScreenShared={isScreenShared} screenRef={screenRef} />
       <div
-        className={room.participants.size === 0 ? "" : "Room_LocalParticipant"}
+        className={
+          isScreenShared || room.participants.size > 0
+            ? "Room_LocalParticipant"
+            : ""
+        }
       >
         <LocalParticipant
-          key={localParticipant.sid}
           participant={localParticipant}
-          localParticipant={true}
           room={room}
+          setIsScreenShared={setIsScreenShared}
+          isScreenShared={isScreenShared}
+          screenRef={screenRef}
         />
       </div>
     </div>

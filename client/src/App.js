@@ -10,13 +10,9 @@ import { onAuthStateChanged } from "firebase/auth";
 function App() {
   const [user, setUser] = useState({});
   useEffect(() => {
-    onAuthStateChanged(firbaseApp.auth(), (user) => {
-      if (user) {
-        setUser({
-          email: user.email,
-          id: user.uid,
-          displayName: user.displayName,
-        });
+    onAuthStateChanged(firbaseApp.auth(), (_user) => {
+      if (_user) {
+        setUser(_user);
       } else {
         setUser(null);
       }

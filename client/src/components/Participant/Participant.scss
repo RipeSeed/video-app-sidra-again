@@ -3,17 +3,35 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin: 5px;
+  margin: 2px 5px;
 }
 
 .Participant_video {
   height: inherit;
   width: inherit;
-  max-width: 480px;
-  max-height: 360px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   border: 3px solid black;
   border-radius: 30px;
+}
+
+.Participant_videoLarge {
+  max-width: 480px;
+  max-height: 360px;
+}
+
+.Participant_videoSmall {
+  max-width: 360px;
+  max-height: 250px;
+}
+
+.Participant_videoSmallest {
+  height: 184px;
+  width: 245px;
+}
+
+.Participant_name {
+  position: relative;
+  top: 22px;
 }
