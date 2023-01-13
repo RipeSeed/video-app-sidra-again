@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import firbaseApp from "../../base";
 import { ReactComponent as VideoChat } from "../../images/video-chat.svg";
@@ -15,6 +15,7 @@ const Lobby = ({
   startRoom,
   setLoader,
 }) => {
+  const [error, setError] = useState(false);
   return (
     <Grid item container xs={12} className="Lobby">
       <Grid
@@ -85,8 +86,8 @@ const Lobby = ({
             className="Lobby_Form"
             onSubmit={(e) => {
               e.preventDefault();
-              setLoader(true);
-              roomName.length >= 1 &&
+              if (roomName.length) {
+                setLoader(true);
                 startRoom(
                   roomName,
                   participantsList,
@@ -95,6 +96,9 @@ const Lobby = ({
                   user.displayName,
                   setLoader
                 );
+              } else {
+                setError(true);
+              }
             }}
           >
             <TextField
@@ -105,6 +109,7 @@ const Lobby = ({
               placeholder="Enter the code"
               onBlur={(e) => {
                 setRoomName(e.target.value);
+                e.target.value.length && setError(false);
               }}
             />
             <Button
@@ -115,6 +120,11 @@ const Lobby = ({
               Join Room
             </Button>
           </form>
+          {error && (
+            <Typography variant="caption" className="Lobby_ErrorText">
+              Please enter Room ID
+            </Typography>
+          )}
         </Grid>
       </Grid>
       <Grid
