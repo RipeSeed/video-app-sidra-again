@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Typography } from "@mui/material";
 import "./Participant.scss";
 
-const Participant = ({ participant, room }) => {
+const Participant = ({
+  participant,
+  room,
+  setIsScreenShared,
+  isScreenShared,
+  screenRef,
+}) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
 
@@ -27,6 +34,7 @@ const Participant = ({ participant, room }) => {
 
     const trackUnsubscribed = (track) => {
       if (track.kind === "video") {
+        track.name === "screen-share" && setIsScreenShared(false);
         setVideoTracks((videoTracks) => videoTracks.filter((v) => v !== track));
       } else if (track.kind === "audio") {
         setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
@@ -44,13 +52,19 @@ const Participant = ({ participant, room }) => {
   }, [participant]);
 
   useEffect(() => {
-    const videoTrack = videoTracks[0];
-    if (videoTrack) {
-      videoTrack.attach(videoRef.current);
-      return () => {
-        videoTrack.detach();
-      };
-    }
+    videoTracks.forEach((track) => {
+      if (track.name === "screen-share") {
+        setIsScreenShared(true);
+        track.attach(screenRef.current);
+      } else {
+        track.attach(videoRef.current);
+      }
+    });
+
+    // return () => {
+    //   videoTrack.detach();
+    //   screenTrack.detach();
+    // };
   }, [videoTracks]);
 
   useEffect(() => {
@@ -65,10 +79,14 @@ const Participant = ({ participant, room }) => {
 
   return (
     <div className="Participant" id={participant.identity}>
-      <h4>{participant.identity.split("-").pop().trim()}</h4>
+      <Typography variant="caption" className="Participant_name">
+        {participant.identity.split("-").pop().trim()}
+      </Typography>
       <video
         className={
-          room.participants.size <= 2
+          isScreenShared
+            ? "Participant_video Participant_videoSmallest"
+            : room.participants.size <= 2
             ? "Participant_video Participant_videoLarge"
             : "Participant_video Participant_videoSmall"
         }

@@ -1,19 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typography } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faMicrophoneSlash,
-  faMicrophone,
-  faVideo,
-  faVideoSlash,
-} from "@fortawesome/free-solid-svg-icons";
+  PresentToAll,
+  CancelPresentation,
+  Mic,
+  MicOff,
+  Videocam,
+  VideocamOff,
+} from "@mui/icons-material";
+import { LocalVideoTrack } from "twilio-video";
 import "./LocalParticipant.scss";
 
-const Participant = ({ participant, room }) => {
+const LocalParticipant = ({
+  participant,
+  room,
+  setIsScreenShared,
+  isScreenShared,
+  screenRef,
+}) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
   const [mute, setMute] = useState(false);
   const [hideVideo, setHideVideo] = useState(false);
+  const [presentScreen, setPresentScreen] = useState(false);
+  const [screenTrack, setScreenTrack] = useState();
 
   const videoRef = useRef();
   const audioRef = useRef();
@@ -73,16 +83,24 @@ const Participant = ({ participant, room }) => {
     }
   }, [audioTracks]);
 
+  const stopPresentation = () => {
+    setPresentScreen(false);
+    setIsScreenShared(false);
+    room.localParticipant.unpublishTrack(screenTrack);
+    screenTrack.stop();
+    setScreenTrack(null);
+  };
+
   return (
     <div className="LocalParticipant" id={participant.identity}>
-      <Typography variant="caption">
+      <Typography variant="caption" className="LocalParticipant_name">
         {participant.identity.split("-").pop().trim()} (You)
       </Typography>
       <video
         className={
-          room.participants.size === 0
-            ? "LocalParticipant_VideoLarge"
-            : "LocalParticipant_VideoSmall"
+          presentScreen || room.participants.size > 0
+            ? "LocalParticipant_VideoSmall"
+            : "LocalParticipant_VideoLarge"
         }
         ref={videoRef}
         autoPlay={true}
@@ -91,8 +109,7 @@ const Participant = ({ participant, room }) => {
       <div className="LocalParticipant_IconsContainer ">
         <div className="LocalParticipant_Icon ">
           {!mute ? (
-            <FontAwesomeIcon
-              icon={faMicrophoneSlash}
+            <MicOff
               onClick={() => {
                 setMute(true);
                 room.localParticipant.audioTracks.forEach((publication) => {
@@ -101,8 +118,7 @@ const Participant = ({ participant, room }) => {
               }}
             />
           ) : (
-            <FontAwesomeIcon
-              icon={faMicrophone}
+            <Mic
               onClick={() => {
                 setMute(false);
                 room.localParticipant.audioTracks.forEach((publication) => {
@@ -115,8 +131,7 @@ const Participant = ({ participant, room }) => {
 
         <div className="LocalParticipant_Icon ">
           {!hideVideo ? (
-            <FontAwesomeIcon
-              icon={faVideoSlash}
+            <VideocamOff
               onClick={() => {
                 setHideVideo(true);
                 room.localParticipant.videoTracks.forEach((publication) => {
@@ -125,8 +140,7 @@ const Participant = ({ participant, room }) => {
               }}
             />
           ) : (
-            <FontAwesomeIcon
-              icon={faVideo}
+            <Videocam
               onClick={() => {
                 setHideVideo(false);
                 room.localParticipant.videoTracks.forEach((publication) => {
@@ -136,9 +150,48 @@ const Participant = ({ participant, room }) => {
             />
           )}
         </div>
+        <div className="LocalParticipant_Icon ">
+          {!presentScreen ? (
+            <PresentToAll
+              onClick={() => {
+                if (isScreenShared) {
+                  alert("Someone has already sharing their screen.");
+                } else {
+                  navigator.mediaDevices
+                    .getDisplayMedia()
+                    .then((stream) => {
+                      setPresentScreen(true);
+                      const _screenTrack = new LocalVideoTrack(
+                        stream.getTracks()[0],
+                        {
+                          name: "screen-share",
+                        }
+                      );
+                      setIsScreenShared(true);
+                      _screenTrack.attach(screenRef.current);
+                      setScreenTrack(_screenTrack);
+                      room.localParticipant.publishTrack(_screenTrack);
+                      _screenTrack.mediaStreamTrack.onended = () => {
+                        setPresentScreen(false);
+                        setIsScreenShared(false);
+                        room.localParticipant.unpublishTrack(_screenTrack);
+                        _screenTrack.stop();
+                        setScreenTrack(null);
+                      };
+                    })
+                    .catch((error) => {
+                      alert("Could not share the screen.");
+                    });
+                }
+              }}
+            />
+          ) : (
+            <CancelPresentation onClick={stopPresentation} />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Participant;
+export default LocalParticipant;

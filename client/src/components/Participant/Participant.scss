@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin: 5px;
+  margin: 2px 5px;
 }
 
 .Participant_video {
@@ -24,4 +24,14 @@
 .Participant_videoSmall {
   max-width: 360px;
   max-height: 250px;
+}
+
+.Participant_videoSmallest {
+  height: 184px;
+  width: 245px;
+}
+
+.Participant_name {
+  position: relative;
+  top: 22px;
 }

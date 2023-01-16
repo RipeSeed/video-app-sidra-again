@@ -30,12 +30,19 @@
   align-items: flex-end;
   justify-content: center;
   position: relative;
-  bottom: 30px;
+  bottom: 35px;
 }
 
 .LocalParticipant_Icon {
   background-color: #d1d1d1;
   border-radius: 50%;
+  height: 24px;
+  width: 24x;
   padding: 2px;
   margin: 2px;
+}
+
+.LocalParticipant_name {
+  position: relative;
+  top: 22px;
 }
