@@ -86,8 +86,8 @@ const LocalParticipant = ({
   const stopPresentation = () => {
     setPresentScreen(false);
     setIsScreenShared(false);
-    screenTrack && room.localParticipant.unpublishTrack(screenTrack);
-    screenTrack && screenTrack.stop();
+    room.localParticipant.unpublishTrack(screenTrack);
+    screenTrack.stop();
     setScreenTrack(null);
   };
 
@@ -171,10 +171,15 @@ const LocalParticipant = ({
                       _screenTrack.attach(screenRef.current);
                       setScreenTrack(_screenTrack);
                       room.localParticipant.publishTrack(_screenTrack);
-                      _screenTrack.mediaStreamTrack.onended = stopPresentation;
+                      _screenTrack.mediaStreamTrack.onended = () => {
+                        setPresentScreen(false);
+                        setIsScreenShared(false);
+                        room.localParticipant.unpublishTrack(_screenTrack);
+                        _screenTrack.stop();
+                        setScreenTrack(null);
+                      };
                     })
                     .catch((error) => {
-                      console.log("error", error);
                       alert("Could not share the screen.");
                     });
                 }
